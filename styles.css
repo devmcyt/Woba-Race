@@ -143,6 +143,14 @@ h2 {
     color: #333;
 }
 
+.word-feedback {
+    min-height: 1.2em;
+    margin: 6px 0 0;
+    color: #fff;
+    font-size: 13px;
+    text-align: center;
+}
+
 .control-actions {
     display: flex;
     gap: 10px;

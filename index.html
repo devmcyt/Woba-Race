@@ -6,55 +6,70 @@
     <title>Word Race</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
+    
 </head>
-<body>
-    <header class="Head">Woba Race</header>
-    <main class="game-container">
-        <section class="player-zone">
-            <h2 class="Aiuser">YOU</h2>
-            <div class="wordshake-layout">
-                <div id="player-grid" class="grid-5x5"></div>
-                <div class="interface-panel">
-                    <div class="table-header">
-                        <span class="col-word">Word</span>
-                        <span class="col-points">Points</span>
-                    </div>
-                    <ul id="player-words" class="word-list-box"></ul>
-                    <input type="text" id="word-input" autocomplete="off" placeholder="Type here...">
-                    <div class="control-actions">
-                        <button id="cancel-btn" class="btn-cancel">Cancel</button>
-                        <button id="enter-btn" class="btn-enter">Enter</button>
-                    </div>
-                </div>
-            </div>
-            <div class="cup-container">
-                <p>Your Cup: <span id="player-score">0</span> / 50 Pearls</p>
-                <div id="player-cup" class="boba-cup"></div>
-            </div>
-        </section>
 
-        <section class="ai-zone mini-scale">
-            <h2 class="Aiuser">AI</h2>
-            <div class="wordshake-layout">
-                <div id="ai-grid" class="grid-5x5 mini-grid"></div>
-                <div class="interface-panel">
-                    <div class="table-header">
-                        <span>Word</span>
-                        <span>Pts</span>
-                    </div>
-                    <ul id="ai-words" class="word-list-box"></ul>
-                    <div class="ai-typing-bar">
-                        <span class="typing-label">Bot Input:</span>
-                        <span id="ai-live-input" class="typing-stream">...</span>
-                    </div>
+<body>
+<header class="Head">Woba Race</header>
+<main class="game-container">
+    
+    <section class="player-zone">
+        <h2 class="Aiuser">YOU</h2>
+        <div class="wordshake-layout">
+           
+            <div id="player-grid" class="grid-5x5"></div>
+            
+            
+            <div class="Typing-area">
+                <div class="Wordarea">
+                    <span class="col-word">Word</span>
+                    <span class="col-points">Points</span>
+                </div>
+                <ul id="player-words" class="word-list-box"></ul>
+                
+                <input type="text" id="word-input" autocomplete="off" placeholder="Type here...">
+                
+                <div class="control-actions">
+                    <button id="cancel-btn" class="btn-cancel">Cancel</button>
+                    <button id="enter-btn" class="btn-enter">Enter</button>
                 </div>
             </div>
-            <div class="cup-container">
-                <p>AI Cup: <span id="ai-score">0</span> / 50 Pearls</p>
-                <div id="ai-cup" class="boba-cup"></div>
+        </div>
+       
+        <div class="cup-container">
+            <p class="cop">Your Cup: <span id="player-score">0</span> / 50 Boba</p>
+            <div id="player-cup" class="boba-cup"></div>
+        </div>
+    </section>
+
+   
+    <section class="ai-zone mini-scale">
+        <h2 class="Aiuser">AI</h2>
+        <div class="wordshake-layout">
+            
+            <div id="ai-grid" class="grid-5x5 mini-grid"></div>
+            
+           
+            <div class="Typing-area">
+                <div class="Wordarea">
+                    <span>Word</span>
+                    <span>Pts</span>
+                </div>
+                <ul id="ai-words" class="word-list-box"></ul>
+                
+                
+                <div class="ai-typing-bar">
+                    <span class="typing-label">Bot Input:</span>
+                    <span id="ai-live-input" class="typing-stream">...</span>
+                </div>
             </div>
-        </section>
-    </main>
+        </div>
+        <div class="cup-container">
+            <p class="cop">AI Cup: <span id="ai-score">0</span> / 50 Boba</p>
+            <div id="ai-cup" class="boba-cup"></div>
+        </div>
+    </section>
+</main>
+
 </body>
 </html>
-    

@@ -12,6 +12,7 @@ let aiAvailableBoardWords = [];
 const playerGrid = document.getElementById("player-grid");
 const aiGrid = document.getElementById("ai-grid");
 const wordInput = document.getElementById("word-input");
+const wordFeedback = document.getElementById("word-feedback");
 const playerWordsUl = document.getElementById("player-words");
 const aiWordsUl = document.getElementById("ai-words");
 const playerScoreSpan = document.getElementById("player-score");
@@ -32,39 +33,17 @@ function calcPoints(word) {
     return 0;
 }
 
-class TrieNode {
-    constructor() {
-        this.children = {};
-        this.isWord = false;
-    }
-}
-
-let trieRoot = new TrieNode();
-
-function insertTrie(word) {
-    let node = trieRoot;
-    for (let char of word) {
-        if (!node.children[char]) {
-            node.children[char] = new TrieNode();
-        }
-        node = node.children[char];
-    }
-    node.isWord = true;
-}
-
 async function loadDictionaryFile() {
     try {
         const response = await fetch('words.txt');
         const textData = await response.text();
         const wordArray = textData.split(/\r?\n/);
-        trieRoot = new TrieNode();
         DICTIONARY_SET.clear();
         
         wordArray.forEach(line => {
             const word = line.trim().toLowerCase();
             if (word.length >= 2) {
                 DICTIONARY_SET.add(word);
-                insertTrie(word);
             }
         });
         console.log(`Dictionary loaded! ${DICTIONARY_SET.size} words ready.`);
@@ -103,77 +82,31 @@ function setupBoard() {
     findWordsForAI();
 }
 
-function verifyGridPath(word) {
-    word = word.toUpperCase();
-    for (let i = 0; i < 25; i++) {
-        if (activeBoardLetters[i] === word[0]) {
-            let visited = new Array(25).fill(false);
-            if (dfs(i, word, 0, visited)) return true;
-        }
+function countBoardLetters() {
+    const letterCounts = new Map();
+    for (const letter of activeBoardLetters) {
+        letterCounts.set(letter, (letterCounts.get(letter) || 0) + 1);
     }
-    return false;
+    return letterCounts;
 }
 
-function dfs(idx, word, wordIdx, visited) {
-    if (wordIdx === word.length) return true;
-    if (idx < 0 || idx >= 25 || visited[idx] || activeBoardLetters[idx] !== word[wordIdx]) return false;
-    
-    visited[idx] = true;
-    let r = Math.floor(idx / 5), c = idx % 5;
-    
-    for (let dr = -1; dr <= 1; dr++) {
-        for (let dc = -1; dc <= 1; dc++) {
-            if (dr === 0 && dc === 0) continue;
-            let nr = r + dr, nc = c + dc;
-            if (nr >= 0 && nr < 5 && nc >= 0 && nc < 5) {
-                if (dfs(nr * 5 + nc, word, wordIdx + 1, visited)) return true;
-            }
+function canFormWordFromBoard(word, availableLetters = countBoardLetters()) {
+    const neededLetters = new Map();
+    for (const letter of word.toUpperCase()) {
+        const needed = (neededLetters.get(letter) || 0) + 1;
+        if (needed > (availableLetters.get(letter) || 0)) {
+            return false;
         }
+        neededLetters.set(letter, needed);
     }
-    visited[idx] = false;
-    return false;
+    return true;
 }
 
 function findWordsForAI() {
-    let foundWords = new Set();
-    let visited = new Array(25).fill(false);
-
-    for (let i = 0; i < 25; i++) {
-        let char = activeBoardLetters[i].toLowerCase();
-        if (trieRoot.children[char]) {
-            dfsTrie(i, trieRoot.children[char], char, visited, foundWords);
-        }
-    }
-
-    aiAvailableBoardWords = Array.from(foundWords);
-}
-
-function dfsTrie(idx, node, currentWord, visited, foundWords) {
-    visited[idx] = true;
-
-    if (node.isWord) {
-        foundWords.add(currentWord.toUpperCase());
-    }
-
-    let r = Math.floor(idx / 5), c = idx % 5;
-
-    for (let dr = -1; dr <= 1; dr++) {
-        for (let dc = -1; dc <= 1; dc++) {
-            if (dr === 0 && dc === 0) continue;
-            let nr = r + dr, nc = c + dc;
-            if (nr >= 0 && nr < 5 && nc >= 0 && nc < 5) {
-                let nextIdx = nr * 5 + nc;
-                if (!visited[nextIdx]) {
-                    let nextChar = activeBoardLetters[nextIdx].toLowerCase();
-                    if (node.children[nextChar]) {
-                        dfsTrie(nextIdx, node.children[nextChar], currentWord + nextChar, visited, foundWords);
-                    }
-                }
-            }
-        }
-    }
-
-    visited[idx] = false;
+    const availableLetters = countBoardLetters();
+    aiAvailableBoardWords = Array.from(DICTIONARY_SET)
+        .filter(word => canFormWordFromBoard(word, availableLetters))
+        .map(word => word.toUpperCase());
 }
 
 function renderPearls(container, count) {
@@ -188,25 +121,39 @@ function submitPlayerWord() {
     const input = wordInput.value.trim().toUpperCase();
     wordInput.value = "";
 
-    if (input.length < 2) return;
-    if (playerFound.has(input)) return;
-
-    if (aiAvailableBoardWords.includes(input)) {
-        playerFound.add(input);
-        
-        const pts = calcPoints(input); 
-        playerpoints += pts;
-        playerScoreSpan.innerText = playerpoints;
-        renderPearls(playerCup, pts);
-        
-        const li = document.createElement("li");
-        li.innerHTML = `<span>${input}</span><span>+${pts}</span>`;
-        playerWordsUl.appendChild(li);
-        
-        playerWordsUl.scrollTop = playerWordsUl.scrollHeight;
-        
-        checkMatchState();
+    if (input.length < 2) {
+        wordFeedback.innerText = "Enter a word with at least 2 letters.";
+        return;
     }
+    if (playerFound.has(input)) {
+        wordFeedback.innerText = "You already found that word.";
+        return;
+    }
+
+    if (!DICTIONARY_SET.has(input.toLowerCase())) {
+        wordFeedback.innerText = "That word isn't in the dictionary.";
+        return;
+    }
+    if (!canFormWordFromBoard(input)) {
+        wordFeedback.innerText = "That word needs letters that aren't available on the board.";
+        return;
+    }
+
+    playerFound.add(input);
+
+    const pts = calcPoints(input);
+    playerpoints += pts;
+    playerScoreSpan.innerText = playerpoints;
+    renderPearls(playerCup, pts);
+
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${input}</span><span>+${pts}</span>`;
+    playerWordsUl.appendChild(li);
+
+    playerWordsUl.scrollTop = playerWordsUl.scrollHeight;
+    wordFeedback.innerText = `Accepted! +${pts} points.`;
+
+    checkMatchState();
 }
 
 enterBtn.addEventListener("click", submitPlayerWord);
