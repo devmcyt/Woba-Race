@@ -241,11 +241,11 @@ async function init() {
 function checkMatchState() {
     if (playerpoints >= SCORE) {
         clearTimeout(aiTimeoutId);
-        alert("Victory! You filled your Boba cup first!");
+        alert("Victory! have your sweet victory twin!");
         location.reload();
     } else if (aipoints >= SCORE) {
         clearTimeout(aiTimeoutId);
-        alert("Defeat! The Clumsy Bot filled its cup first.");
+        alert("Defeat! The Clanker filled its cup first.");
         location.reload();
     }
 }
