@@ -1,0 +1,246 @@
+
+@font-face {
+    font-family: 'RubikStorm';
+    src: url('./rubek.ttf') format('truetype');
+}
+
+.Head {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    
+
+    padding: 10px;
+    font-size: 60px;
+    font-weight: bold;
+    font-family: 'RubikStorm', cursive;
+    color: #4eedb4;
+    text-shadow: 0 0 15px rgba(78, 237, 180, 0.7);
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+body {
+    background-color: #091413;
+
+}
+
+.pp {
+    background-color: #091413;
+    padding: 10px;
+    color: #408A71;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'RubikStorm', cursive;
+}
+
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+section {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+h2 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+
+.wordshake-layout {
+    display: flex;
+    background: #408A71;
+    padding: 20px;
+    border-radius: 5px;
+    border: 4px solid #000000;
+    gap: 20px;
+}
+
+
+.grid-5x5 {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(5, 60px);
+    gap: 10px;
+}
+
+.letter-tile {
+    background: #d4e6f1;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border-bottom: 4px solid #acc6d7;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+
+.Typing-area {
+    display: flex;
+    flex-direction: column;
+    width: 260px;
+    background: #000000;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.Wordarea {
+    display: flex;
+    justify-content: space-between;
+    background: #B0E4CC;
+    color: white;
+    padding: 6px 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.word-list-box {
+    flex-grow: 1;
+    height: 180px;
+    border: 1px solid #ccc;
+    background: #5d5d71;
+    overflow-y: auto;
+    list-style: none;
+    color: #333;
+    padding: 5px;
+}
+
+.word-list-box li {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 8px;
+    border-bottom: 1px solid #4b5b54;
+    font-weight: 500;
+}
+
+#word-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    color: #333;
+}
+
+.control-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-cancel { background-color: #cb4335; }
+.btn-cancel:hover { background-color: #b03a2e; }
+.btn-enter { background-color: #2e4053; }
+.btn-enter:hover { background-color: #212f3d; }
+
+.cop {
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-family: Arial, cursive;
+}
+
+.mini-scale {
+    transform: scale(0.85);
+    transform-origin: top right;
+}
+
+.ai-typing-bar {
+    margin-top: 10px;
+    background: #f2f4f4;
+    color: #333;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: flex;
+    gap: 5px;
+}
+
+.typing-stream {
+    font-weight: bold;
+    color: #e67e22;
+}
+
+
+.cup-container {
+    margin-top: 10px;
+    text-align: center;
+}
+.cup-container p{
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.boba-cup {
+    width: 90px;
+    height: 100px;
+    border: 4px solid #fff;
+    border-top: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    flex-wrap: wrap-reverse;
+    align-content: flex-start;
+    padding: 8px;
+    gap: 4px;
+    overflow: hidden;
+}
+
+.boba-pearl {
+    width: 16px;
+    height: 16px;
+    background: #111;
+    border-radius: 50%;
+    box-shadow: inset -2px -2px 4px rgba(255,255,255,0.2);
+    animation: drop 0.25s ease-out forwards;
+}
+.Aiuser {
+    color: #B0E4CC;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: arial, sans-serif;
+}
+.ai-zone {
+    flex: 0 1 450px}
+
+
+@keyframes drop {
+    0% { transform: translateY(-150px); }
+    100% { transform: translateY(0); }
+}
