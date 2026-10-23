@@ -34,22 +34,22 @@ function calcPoints(word) {
 }
 
 async function loadDictionaryFile() {
-    try {
-        const response = await fetch('words.txt');
-        const textData = await response.text();
-        const wordArray = textData.split(/\r?\n/);
-        DICTIONARY_SET.clear();
-        
-        wordArray.forEach(line => {
-            const word = line.trim().toLowerCase();
-            if (word.length >= 2) {
-                DICTIONARY_SET.add(word);
-            }
-        });
-        console.log(`Dictionary loaded! ${DICTIONARY_SET.size} words ready.`);
-    } catch (error) {
-        console.error("Could not load the text file database:", error);
+    const response = await fetch('words.txt');
+    if (!response.ok) {
+        throw new Error(`Dictionary request failed with HTTP ${response.status}`);
     }
+
+    const textData = await response.text();
+    const wordArray = textData.split(/\r?\n/);
+    DICTIONARY_SET.clear();
+    
+    wordArray.forEach(line => {
+        const word = line.trim().toLowerCase();
+        if (word.length >= 2) {
+            DICTIONARY_SET.add(word);
+        }
+    });
+    console.log(`Dictionary loaded! ${DICTIONARY_SET.size} words ready.`);
 }
 
 function setupBoard() {
@@ -227,7 +227,13 @@ function triggerAICycle() {
 async function init() {
     if (aiTimeoutId) clearTimeout(aiTimeoutId);
     Ailoss = Math.random() < 0.70;
-    await loadDictionaryFile();
+    try {
+        await loadDictionaryFile();
+    } catch (error) {
+        console.error("Could not load the text file database:", error);
+        wordFeedback.innerText = "Could not load the word list. Check the published words.txt file, then reload.";
+        return;
+    }
     setupBoard();
     aiTimeoutId = setTimeout(triggerAICycle, 2000);
 }
